@@ -27,7 +27,7 @@ public abstract class EnchantedBookForEmeraldsTradeMixin {
     @Shadow
     @Final
     private int xpValue;
-    @Inject(at=@At("HEAD"), method="getOffer", cancellable = true)
+    /*@Inject(at=@At("HEAD"), method="getOffer", cancellable = true)
     private void getOfferInjection(Entity trader, Random rand, CallbackInfoReturnable<MerchantOffer> cir) {
         List<Enchantment> list = Registry.ENCHANTMENT.stream().filter(Enchantment::canVillagerTrade).collect(Collectors.toList());
         Enchantment enchantment = list.get(rand.nextInt(list.size()));
@@ -43,9 +43,9 @@ public abstract class EnchantedBookForEmeraldsTradeMixin {
         }
 
         cir.setReturnValue(new MerchantOffer(new ItemStack(Items.EMERALD, j), new ItemStack(Items.BOOK), itemstack, 12, this.xpValue, 0.2F));
-    }
-    /*@ModifyVariable(method="getOffer", ordinal=0, at=@At(value="STORE", ordinal=5))
-    private int getMaxEnchantment() {
-        return
     }*/
+    @ModifyVariable(method="getOffer", ordinal=0, at=@At(value="STORE", ordinal=5), name="i", print = true)
+    private int getMaxEnchantment(int i) {
+        return 1;
+    }
 }

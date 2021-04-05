@@ -58,6 +58,8 @@ minecraft {
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
+            property 'mixin.debug.export', 'true'
+
             arg "-mixin.config=maxedvillagers.mixins.json"
             mods {
                 examplemod {
@@ -80,6 +82,9 @@ minecraft {
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
+            property 'mixin.debug.export', 'true'
+
+
             arg "-mixin.config=maxedvillagers.mixins.json"
             mods {
                 examplemod {
