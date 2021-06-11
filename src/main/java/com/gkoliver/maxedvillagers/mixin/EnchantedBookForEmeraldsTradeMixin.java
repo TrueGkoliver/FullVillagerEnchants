@@ -26,15 +26,15 @@ import java.util.stream.Collectors;
 public abstract class EnchantedBookForEmeraldsTradeMixin {
     @Shadow
     @Final
-    private int xpValue;
+    private int villagerXp;
     @Inject(at=@At("HEAD"), method="getOffer", cancellable = true)
     private void getOfferInjection(Entity trader, Random rand, CallbackInfoReturnable<MerchantOffer> cir) {
-        List<Enchantment> list = Registry.ENCHANTMENT.stream().filter(Enchantment::canVillagerTrade).collect(Collectors.toList());
+        List<Enchantment> list = Registry.ENCHANTMENT.stream().filter(Enchantment::isTradeable).collect(Collectors.toList());
         Enchantment enchantment = list.get(rand.nextInt(list.size()));
         int i = enchantment.getMaxLevel();
-        ItemStack itemstack = EnchantedBookItem.getEnchantedItemStack(new EnchantmentData(enchantment, i));
+        ItemStack itemstack = EnchantedBookItem.createForEnchantment(new EnchantmentData(enchantment, i));
         int j = 2 + rand.nextInt(5 + i * 10) + 3 * i;
-        if (enchantment.isTreasureEnchantment()) {
+        if (enchantment.isTreasureOnly()) {
             j *= 2;
         }
 
@@ -42,7 +42,7 @@ public abstract class EnchantedBookForEmeraldsTradeMixin {
             j = 64;
         }
 
-        cir.setReturnValue(new MerchantOffer(new ItemStack(Items.EMERALD, j), new ItemStack(Items.BOOK), itemstack, 12, this.xpValue, 0.2F));
+        cir.setReturnValue(new MerchantOffer(new ItemStack(Items.EMERALD, j), new ItemStack(Items.BOOK), itemstack, 12, this.villagerXp, 0.2F));
     }
     /*@ModifyVariable(method="getOffer", ordinal=0, at=@At(value="STORE", ordinal=5), name="i", print = true)
     private int getMaxEnchantment(int i) {
