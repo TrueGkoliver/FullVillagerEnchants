@@ -1,5 +1,6 @@
 package com.gkoliver.maxedvillagers.mixin;
 
+import com.gkoliver.maxedvillagers.config.MaxedVillagerConfigs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.Entity;
@@ -27,7 +28,7 @@ public abstract class EnchantedBookForEmeraldsTradeMixin {
     @Shadow
     @Final
     private int villagerXp;
-    @Inject(at=@At("HEAD"), method="getOffer", cancellable = true)
+    /*0@Inject(at=@At("HEAD"), method="getOffer", cancellable = true)
     private void getOfferInjection(Entity trader, Random rand, CallbackInfoReturnable<MerchantOffer> cir) {
         List<Enchantment> list = Registry.ENCHANTMENT.stream().filter(Enchantment::isTradeable).collect(Collectors.toList());
         Enchantment enchantment = list.get(rand.nextInt(list.size()));
@@ -43,9 +44,32 @@ public abstract class EnchantedBookForEmeraldsTradeMixin {
         }
 
         cir.setReturnValue(new MerchantOffer(new ItemStack(Items.EMERALD, j), new ItemStack(Items.BOOK), itemstack, 12, this.villagerXp, 0.2F));
-    }
-    /*@ModifyVariable(method="getOffer", ordinal=0, at=@At(value="STORE", ordinal=5), name="i", print = true)
-    private int getMaxEnchantment(int i) {
-        return 1;
     }*/
+    /*@ModifyVariable(print = true, method= "getOffer(Lnet/minecraft/entity/Entity;Ljava/util/Random;)Lnet/minecraft/item/MerchantOffer;", at=@At(value="STORE", ordinal=0))
+    private Object getMaxEnchantment() {
+        return null;
+    }*/
+    private static final Random rand = new Random();
+    @SuppressWarnings("SpellCheckingInspection")
+    @ModifyVariable(
+            method= "getOffer(Lnet/minecraft/entity/Entity;Ljava/util/Random;)Lnet/minecraft/item/MerchantOffer;",
+            require=1,
+            index=5,
+            at=@At(
+                    value="STORE",
+                    ordinal=0
+            ),
+            print = true
+    )
+    private int getMaxEnchantment(int old, Entity p_221182_1_, Random p_221182_2_) {
+        /*if (MaxedVillagerConfigs.CONFIG.DECAPITATION.get()) {
+            return MathHelper.nextInt(rand, enchantment.getMinLevel(), Math.max(1, enchantment.getMaxLevel()-1));
+        }
+        if (MaxedVillagerConfigs.CONFIG.MIN_MAX.get()) {
+            return enchantment.getMaxLevel();
+        } else {
+            return enchantment.getMinLevel();
+        }*/
+        return 1;
+    }
 }
