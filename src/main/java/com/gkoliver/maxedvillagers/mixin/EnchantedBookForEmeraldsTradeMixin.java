@@ -30,28 +30,6 @@ public abstract class EnchantedBookForEmeraldsTradeMixin {
     @Shadow
     @Final
     private int villagerXp;
-    /*0@Inject(at=@At("HEAD"), method="getOffer", cancellable = true)
-    private void getOfferInjection(Entity trader, Random rand, CallbackInfoReturnable<MerchantOffer> cir) {
-        List<Enchantment> list = Registry.ENCHANTMENT.stream().filter(Enchantment::isTradeable).collect(Collectors.toList());
-        Enchantment enchantment = list.get(rand.nextInt(list.size()));
-        int i = enchantment.getMaxLevel();
-        ItemStack itemstack = EnchantedBookItem.createForEnchantment(new EnchantmentData(enchantment, i));
-        int j = 2 + rand.nextInt(5 + i * 10) + 3 * i;
-        if (enchantment.isTreasureOnly()) {
-            j *= 2;
-        }
-
-        if (j > 64) {
-            j = 64;
-        }
-
-        cir.setReturnValue(new MerchantOffer(new ItemStack(Items.EMERALD, j), new ItemStack(Items.BOOK), itemstack, 12, this.villagerXp, 0.2F));
-    }*/
-    /*@ModifyVariable(print = true, method= "getOffer(Lnet/minecraft/entity/Entity;Ljava/util/Random;)Lnet/minecraft/item/MerchantOffer;", at=@At(value="STORE", ordinal=0))
-    private Object getMaxEnchantment() {
-        return null;
-    }*/
-
     ThreadLocal<Enchantment> enchantmentThreadLocal = new ThreadLocal<>();
     @Inject(at=@At(value="INVOKE", target = "net/minecraft/enchantment/Enchantment.getMinLevel()I", shift = At.Shift.BEFORE), method="getOffer", locals = LocalCapture.CAPTURE_FAILHARD)
     private void gainEnchantment(Entity p_221182_1_, Random p_221182_2_, CallbackInfoReturnable<MerchantOffer> cir, List<Enchantment> null1, Enchantment enchant) {
