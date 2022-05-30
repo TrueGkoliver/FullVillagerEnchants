@@ -1,5 +1,8 @@
 {
   "maxedvillagers.config.min_max" : "Maximum/Minimum Mode",
-  "maxedvillagers.config.decapitation" : "Decapitation Mode"
-
+  "maxedvillagers.config.decapitation" : "Decapitation Mode",
+  "maxedvillagers.config.price_waiver" : "Treasure Enchantment Price Waiver",
+  "maxedvillagers.config.no_treasure" : "Treasure Enchants Disabled",
+  "maxedvillagers.config.cursed_books" : "Books Have Curses",
+  "maxedvillagers.config.override_allowed" : "All Enchants Allowed for Trading"
 }
