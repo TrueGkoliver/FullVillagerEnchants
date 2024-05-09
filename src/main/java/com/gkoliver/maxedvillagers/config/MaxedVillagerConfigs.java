@@ -13,6 +13,8 @@ public class MaxedVillagerConfigs {
         public final ForgeConfigSpec.BooleanValue NO_RARE;
         public final ForgeConfigSpec.BooleanValue CURSES;
         public final ForgeConfigSpec.BooleanValue ALL_ALLOWED;
+        public final ForgeConfigSpec.ConfigValue<Integer> LOOT_MODE;
+        public final ForgeConfigSpec.BooleanValue LOOT_CURSES;
         public Configuration(ForgeConfigSpec.Builder builderIn) {
             builderIn.comment("Maxed Villager Enchants")
                     .push("general");
@@ -34,6 +36,10 @@ public class MaxedVillagerConfigs {
             ALL_ALLOWED = builderIn.comment("If this value is false, then all behavior is normal. If it is true, then all enchantments will be tradable, even those locked off normally (such as Soul Speed). This does not override the other options, however; if treasure enchants are disabled, they will not spawn.")
                     .translation("maxedvillagers.config.override_allowed")
                     .define("all_allowed", true); //DONE
+            LOOT_MODE = builderIn.comment("This value determines how chest loot behaves: 0 is normal, 1 is all maximum, 2 is all minimum, and 3 is decapitation mode.")
+                            .translation("maxedvillagers.config.loot_mode").define("loot_mode",0);
+            LOOT_CURSES = builderIn.comment("This value determines if curses will always be added to loot: false is normal vanilla behavior")
+                            .translation("maxedvillagers.config.loot_curses").define("loot_curses", false);
             builderIn.pop(1);
         }
     }

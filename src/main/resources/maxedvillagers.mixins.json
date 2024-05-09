@@ -5,7 +5,9 @@
   "refmap": "maxedvillagers.refmap.json",
   "mixins": [
     "EnchantedBookForEmeraldsTradeMixin",
-    "EnchantmentHelperMixin"
+    "EnchantmentHelperMixin",
+    "EnchantRandomlyFunctionMixin",
+    "EnchantWithLevelsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

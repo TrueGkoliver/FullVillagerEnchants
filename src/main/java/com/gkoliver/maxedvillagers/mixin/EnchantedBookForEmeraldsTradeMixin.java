@@ -50,7 +50,7 @@ public abstract class EnchantedBookForEmeraldsTradeMixin {
         if (MaxedVillagerConfigs.CONFIG.CURSES.get() && !null2.isCurse()) {
             List<Enchantment> curses = ForgeRegistries.ENCHANTMENTS.getValues().stream().filter((e) -> e.isCurse()).collect(Collectors.toList());
             if (curses.size() > 0) {
-                Enchantment curse = curses.get(Mth.m_216271_(p_219689_,0, curses.size() - 1));
+                Enchantment curse = curses.get(p_219689_.m_188503_(curses.size()));
                 EnchantedBookItem.addEnchantment(stack, new EnchantmentInstance(curse, Mth.m_216271_(p_219689_,curse.getMinLevel(), curse.getMaxLevel()+1)));
             }
         }
