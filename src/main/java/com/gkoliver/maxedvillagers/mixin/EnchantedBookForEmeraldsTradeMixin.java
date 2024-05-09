@@ -2,6 +2,7 @@ package com.gkoliver.maxedvillagers.mixin;
 
 import com.gkoliver.maxedvillagers.config.MaxedVillagerConfigs;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.EnchantedBookItem;
@@ -31,25 +32,26 @@ public abstract class EnchantedBookForEmeraldsTradeMixin {
     @Final
     private int villagerXp;
     ThreadLocal<Enchantment> enchantmentThreadLocal = new ThreadLocal<>();
-    final String OFFER = "Lnet/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds;getOffer(Lnet/minecraft/world/entity/Entity;Ljava/util/Random;)Lnet/minecraft/world/item/trading/MerchantOffer;";
-    @Inject(at=@At(value="INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;getMinLevel()I", shift = At.Shift.BEFORE), method=OFFER, locals = LocalCapture.CAPTURE_FAILHARD)
-    private void gainEnchantment(Entity p_221182_1_, Random p_221182_2_, CallbackInfoReturnable<MerchantOffer> cir, List<Enchantment> null1, Enchantment enchant) {
+    //final String OFFER = "Lnet/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds;getOffer(Lnet/minecraft/world/entity/Entity;Ljava/util/Random;)Lnet/minecraft/world/item/trading/MerchantOffer;";
+    final String OFFER = "m_213663_";
+    @Inject(at=@At(value="INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;getMinLevel()I", shift = At.Shift.BEFORE), method="m_213663_", locals = LocalCapture.CAPTURE_FAILHARD)
+    private void gainEnchantment(Entity p_219688_, RandomSource p_219689_, CallbackInfoReturnable<MerchantOffer> cir, List<Enchantment> null1, Enchantment enchant) {
         enchantmentThreadLocal.set(enchant);
     }
     @Inject(at=
     @At(value="INVOKE_ASSIGN",
-            target = "java/util/Random.nextInt (I)I",
+            target = "net/minecraft/util/RandomSource.m_188503_ (I)I",
             ordinal = 1,
             shift=At.Shift.AFTER
     ),
-            method=OFFER,
+            method="m_213663_",
             locals = LocalCapture.CAPTURE_FAILHARD)
-    private void doThingWithBook(Entity p_221182_1_, Random random, CallbackInfoReturnable<MerchantOffer> cir, List null1, Enchantment null2, int null3, ItemStack stack) {
+    private void doThingWithBook(Entity p_219688_, RandomSource p_219689_, CallbackInfoReturnable<MerchantOffer> cir, List null1, Enchantment null2, int null3, ItemStack stack) {
         if (MaxedVillagerConfigs.CONFIG.CURSES.get() && !null2.isCurse()) {
             List<Enchantment> curses = ForgeRegistries.ENCHANTMENTS.getValues().stream().filter((e) -> e.isCurse()).collect(Collectors.toList());
             if (curses.size() > 0) {
-                Enchantment curse = curses.get(random.nextInt(0, curses.size() - 1));
-                EnchantedBookItem.addEnchantment(stack, new EnchantmentInstance(curse, random.nextInt(curse.getMinLevel(), curse.getMaxLevel()+1)));
+                Enchantment curse = curses.get(Mth.m_216271_(p_219689_,0, curses.size() - 1));
+                EnchantedBookItem.addEnchantment(stack, new EnchantmentInstance(curse, Mth.m_216271_(p_219689_,curse.getMinLevel(), curse.getMaxLevel()+1)));
             }
         }
     }
@@ -66,11 +68,11 @@ public abstract class EnchantedBookForEmeraldsTradeMixin {
                     ordinal=0
             )
     )
-    private int getMaxEnchantment(int old, Entity p_221182_1_, Random p_221182_2_) {
+    private int getMaxEnchantment(int old, Entity p_221182_1_, RandomSource p_221182_2_) {
         final Enchantment enchantment = enchantmentThreadLocal.get();
         enchantmentThreadLocal.remove();
         if (MaxedVillagerConfigs.CONFIG.DECAPITATION.get()) {
-            int debug = p_221182_2_.nextInt(enchantment.getMinLevel(), Math.max(1, enchantment.getMaxLevel()-1));
+            int debug = Mth.m_216271_(p_221182_2_,enchantment.getMinLevel(), Math.max(1, enchantment.getMaxLevel()-1));
             return debug;
         }
         if (MaxedVillagerConfigs.CONFIG.MIN_MAX.get()) {
