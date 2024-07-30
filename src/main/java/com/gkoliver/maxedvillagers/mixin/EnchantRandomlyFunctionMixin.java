@@ -34,18 +34,20 @@ public abstract class EnchantRandomlyFunctionMixin {
 
 
 
-    @Inject(method="run", at=@At(value="RETURN"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
-    private void addCurses(ItemStack p_80429_, LootContext p_80430_, CallbackInfoReturnable<ItemStack> cir,RandomSource randomsource) {
-        System.out.println("This is a pre-test");
+    @Inject(method="run", at=@At(value="TAIL"), locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
+    private void addCurses(ItemStack p_80429_, LootContext p_80430_, CallbackInfoReturnable<ItemStack> cir) {
+        //An absolutely bizarre sequence caused me to put this in.
+        //I originally had it as a captured local, but my dev environment and playtesting indicated that the
+        // lines for defining the Enchantment and the RandomSource were **flipped**, meaning that in dev playtesting, RandomSource had to come first,
+        // while in "live" playtesting, Enchantment had to come first. I do not know why this is, so I just decided to include neither! Haha!
+        RandomSource randomsource = p_80430_.m_230907_();
         if (cir.getReturnValue()==null) {
             System.out.println(p_80429_);
-            System.out.println("Caught as null?");
             return;
         }
-        System.out.println("OK, we got past here");
 
         final ItemStack sth = cir.getReturnValue().copy();
-        System.out.println(sth);
+        //System.out.println(sth);
         Map<Enchantment, Integer> map = p_80429_.getAllEnchantments();
         boolean flag = false;
         for (Enchantment enc : map.keySet()) {
@@ -59,11 +61,11 @@ public abstract class EnchantRandomlyFunctionMixin {
         if (MaxedVillagerConfigs.CONFIG.LOOT_CURSES.get() && !flag) {
             List<Enchantment> curses = ForgeRegistries.ENCHANTMENTS.getValues().stream().filter((e) -> {return (ItemStack.sameItem(sth,new ItemStack(Items.ENCHANTED_BOOK))||e.canEnchant(sth)) && e.isCurse();}).collect(Collectors.toList());
             if (curses.size() > 0) {
-                System.out.println("Got to line 58");
+                //System.out.println("Got to line 58");
                 Enchantment curse = curses.get(randomsource.m_188503_( curses.size()));
-                System.out.println(curse);
+                //System.out.println(curse);
                 map.put(curse,MaxedVillagers.getNewLootEnchant(curse,randomsource,(curse.getMinLevel()==curse.getMaxLevel())? curse.getMinLevel() : (randomsource.m_216339_(curse.getMinLevel(), curse.getMaxLevel()))));
-                System.out.println(map);
+                //System.out.println(map);
                 EnchantmentHelper.setEnchantments(map,sth);
                 cir.setReturnValue(sth);
                 //p_80429_ = ((IEnchantRandomlyInvoker)this).callm_230979_(p_80429_, curse, randomsource);
